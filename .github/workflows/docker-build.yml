@@ -1,0 +1,26 @@
+name: Publish Docker image
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Build the Docker image
+        run: docker build --no-cache-filter add --tag yt-music-dl .
+
+      - name: Tag the Docker image
+        run: docker tag yt-music-dl ghcr.io/EatPrilosec/YT-PL-DL
+
+      - name: Push the Docker image
+        run: docker push ghcr.io/EatPrilosec/YT-PL-DL
