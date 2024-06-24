@@ -5,22 +5,39 @@ on:
   #push:
     #branches:
       #- main
-
+env:
+  IMAGE_NAME: yt-pl-dl
+  
 jobs:
   build:
     runs-on: ubuntu-latest
-
+    permissions:
+      packages: write
+      contents: read
+      #
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
+      - name: Build image
+        run: docker build --file Dockerfile --no-cache-filter add --tag $IMAGE_NAME --label "runnumber=${GITHUB_RUN_ID}" . 
 
-      - name: Build the Docker image
-        run: docker build --no-cache-filter add --tag yt-music-dl .
+      - name: Log in to registry
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+        #
+      - name: Push image
+        run: |
+          IMAGE_ID=ghcr.io/${{ github.repository_owner }}/$IMAGE_NAME
 
-      - name: Tag the Docker image
-        run: docker tag yt-music-dl ghcr.io/EatPrilosec/yt-pl-dl
+          # This changes all uppercase characters to lowercase.
+          IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
+          # This strips the git ref prefix from the version.
+          VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+          # This strips the "v" prefix from the tag name.
+          [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
+          # This uses the Docker `latest` tag convention.
+          [ "$VERSION" == "main" ] && VERSION=latest
+          echo IMAGE_ID=$IMAGE_ID
+          echo VERSION=$VERSION
+          docker tag $IMAGE_NAME $IMAGE_ID:$VERSION
+          docker push $IMAGE_ID:$VERSION
 
-      - name: Push the Docker image
-        run: docker push ghcr.io/EatPrilosec/yt-pl-dl
