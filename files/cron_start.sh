@@ -6,8 +6,13 @@ echo "Playlists_Path="$Playlists_Path"" >>/opt/env
 echo "Playlist_TempPath="$Playlist_TempPath"" >>/opt/env
 echo "Playlist_Archive="$Playlist_Archive"" >>/opt/env
 
+addgroup --gid $PGID ytpldl
 
-echo "$CronSchedule sudo --group=$PGID --user=$PUID /opt/get-YTMusicPlaylist.sh >/opt/ytpldl.log 2>/opt/ytpldl.log" >/opt/cron
+adduser --uid $PUID --gid $PGID --no-create-home ytpldl
+
+
+
+echo "$CronSchedule sudo --group=ytpldl --user=ytpldl /opt/get-YTMusicPlaylist.sh >/opt/ytpldl.log 2>/opt/ytpldl.log" >/opt/cron
 
 crontab /opt/cron
 touch /opt/ytpldl.log
