@@ -27,11 +27,9 @@ RUN mkdir -p /opt
 #RUN chown 1000:1000 -R /opt
 WORKDIR /opt
 
-#ADD --chown=1000:1000 --chmod=777 ["files/yt-dlp" "/opt"]
-#ADD --chown=1000:1000 --chmod=777 ["files/scripts/get-YTMusicPlaylist.sh" "/opt"]
 FROM base AS add
 ADD  --chmod=777 files* /opt/
-#--chown=1000:1000
+RUN chmod -R 777 /opt
 
 ENV CronSchedule="0,20,40 5-22 * * *"
 ENV Playlist="https://www.youtube.com/playlist?list=PLYJsyEKS11ydV1tC2wJtc3CkwczCyYNyZ"
