@@ -40,4 +40,4 @@ ENV Playlist_TempPath="/Storage/.cache"
 ENV Playlist_Archive="/Storage/Media/Unorganized/ytdlp/mymusic-archive"
 
 USER 1000:1000
-CMD ["/opt/get-YTMusicPlaylist.sh"]
+CMD ["/opt/cron_start.sh"]
