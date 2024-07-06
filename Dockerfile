@@ -6,7 +6,7 @@ RUN echo 'debconf debconf/frontend select teletype' | debconf-set-selections
 
 RUN apt-get update
 RUN apt-get dist-upgrade -y
-RUN DEBIAN_FRONTEND=noninteractive apt -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confnew" -y install cron python3 
+RUN DEBIAN_FRONTEND=noninteractive apt -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confnew" -y install cron sudo python3 
 
 
 RUN apt-get clean
@@ -24,20 +24,21 @@ RUN rm -f           \
 
 
 RUN mkdir -p /opt
-RUN chown 1000:1000 -R /opt
+#RUN chown 1000:1000 -R /opt
 WORKDIR /opt
 
 #ADD --chown=1000:1000 --chmod=777 ["files/yt-dlp" "/opt"]
 #ADD --chown=1000:1000 --chmod=777 ["files/scripts/get-YTMusicPlaylist.sh" "/opt"]
 FROM base AS add
-ADD --chown=1000:1000 --chmod=777 files* /opt/
-
+ADD  --chmod=777 files* /opt/
+#--chown=1000:1000
 
 ENV Playlist="https://www.youtube.com/playlist?list=PLYJsyEKS11ydV1tC2wJtc3CkwczCyYNyZ"
 ENV Playlist_name="music"
 ENV Playlists_Path="/Storage/Media/Unorganized/ytdlp/playlists"
 ENV Playlist_TempPath="/Storage/.cache"
 ENV Playlist_Archive="/Storage/Media/Unorganized/ytdlp/mymusic-archive"
-
-USER 1000:1000
+ENV PUID="1000"
+ENV PGID="1000"
+#USER 1000:1000
 CMD ["/opt/cron_start.sh"]
