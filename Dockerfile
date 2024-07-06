@@ -33,6 +33,7 @@ FROM base AS add
 ADD  --chmod=777 files* /opt/
 #--chown=1000:1000
 
+ENV CronSchedule="0,20,40 5-22 * * *"
 ENV Playlist="https://www.youtube.com/playlist?list=PLYJsyEKS11ydV1tC2wJtc3CkwczCyYNyZ"
 ENV Playlist_name="music"
 ENV Playlists_Path="/Storage/Media/Unorganized/ytdlp/playlists"
@@ -41,4 +42,5 @@ ENV Playlist_Archive="/Storage/Media/Unorganized/ytdlp/mymusic-archive"
 ENV PUID="1000"
 ENV PGID="1000"
 #USER 1000:1000
+
 CMD ["/opt/cron_start.sh"]
