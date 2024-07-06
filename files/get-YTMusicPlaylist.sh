@@ -1,5 +1,5 @@
 #!/bin/bash
-
+. /opt/env
 echo Playlist: $Playlist 						#https://www.youtube.com/playlist?list=PLYJsyEKS11ydV1tC2wJtc3CkwczCyYNyZ
 echo Playlist_name: $Playlist_name 				#music
 echo Playlists_Path: $Playlists_Path 			#/Storage/Media/Unorganized/ytdlp/playlists
