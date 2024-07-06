@@ -6,9 +6,9 @@ echo "Playlists_Path="$Playlists_Path"" >>/opt/env
 echo "Playlist_TempPath="$Playlist_TempPath"" >>/opt/env
 echo "Playlist_Archive="$Playlist_Archive"" >>/opt/env
 
-addgroup --gid $PGID ytpldl
+addgroup --quiet --gid $PGID ytpldl
 
-adduser --uid $PUID --gid $PGID --no-create-home ytpldl
+adduser --quiet --uid $PUID --gid $PGID --no-create-home ytpldl
 
 
 
