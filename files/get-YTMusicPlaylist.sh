@@ -19,7 +19,7 @@ echo /app/yt-dlp --embed-metadata --windows-filenames \
 	--embed-metadata \
 	-o "$Playlist_name/%(artist|Unknown Artist)s - %(track|Unknown Song Name)s __ %(fulltitle)s.%(ext)s" -f m4a \
 	-P "$Playlists_Path" \
-	-P temp:"$Playlist_TempPath" \
+	-P "temp:$Playlist_TempPath" \
 	--buffer-size 4k -N 8 --resize-buffer \
 	--download-archive $Playlist_Archive \
 	$Playlist 
@@ -28,7 +28,7 @@ echo /app/yt-dlp --embed-metadata --windows-filenames \
 	--embed-metadata \
 	-o "$Playlist_name/%(artist|Unknown Artist)s - %(track|Unknown Song Name)s __ %(fulltitle)s.%(ext)s" -f m4a \
 	-P "$Playlists_Path" \
-	-P temp:"$Playlist_TempPath" \
+	-P "temp:$Playlist_TempPath" \
 	--buffer-size 4k -N 8 --resize-buffer \
 	--download-archive $Playlist_Archive \
 	$Playlist | grep -v 'has already been recorded in the archive'
