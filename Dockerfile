@@ -50,17 +50,19 @@ ENV PGID="1000"
 
 ENV CronCommand /app/get-YTMusicPlaylist.sh 
 SHELL ["/bin/bash", "-c"]
-CMD usermod -u $PUID user ; \
-    groupmod -g $PGID userg ; \
-    usermod -a -G sudo user ; \
-    env >/app/env ; \
-    chown -R user:userg $HOME ; \
-    chown -R user:userg /app ; \
-    ls -l /app ; \
+CMD if [ -f /app/fresh ] ; then \
+        usermod -u $PUID user ; \
+        groupmod -g $PGID userg ; \
+        usermod -a -G sudo user ; \
+        env >/app/env ; \
+        chown -R user:userg $HOME ; \
+        chown -R user:userg /app ; \
+        ls -l /app ; \
+    fi ; \
     sudo -E --group=userg --user=user id ; \
     sudo -E --group=userg --user=user $CronCommand >/app/cron.log 2>/app/cron.log & \
-    echo "$CronSchedule sudo -E --group=userg --user=user $CronCommand >/app/cron.log 2>/app/cron.log" >/home/user/cronfile ; \
-    crontab /home/user/cronfile ; \
+    echo "$CronSchedule sudo -E --group=userg --user=user $CronCommand >/app/cron.log 2>/app/cron.log" >/app/cronfile ; \
+    crontab /app/cronfile ; \
     cron & \
     tail -F /app/cron.log
 
