@@ -14,6 +14,15 @@ echo Playlist_Archive: $Playlist_Archive 		#/Storage/Media/Unorganized/ytdlp/mym
 
 /app/yt-dlp -U
 /app/yt-dlp --version
+echo /app/yt-dlp --embed-metadata --windows-filenames \
+	--parse-metadata "title:%(artist)s - %(track)s" \
+	--embed-metadata \
+	-o "$Playlist_name/%(artist|Unknown Artist)s - %(track|Unknown Song Name)s __ %(fulltitle)s.%(ext)s" -f m4a \
+	-P "$Playlists_Path" \
+	-P temp:"$Playlist_TempPath" \
+	--buffer-size 4k -N 8 --resize-buffer \
+	--download-archive $Playlist_Archive \
+	$Playlist 
 /app/yt-dlp --embed-metadata --windows-filenames \
 	--parse-metadata "title:%(artist)s - %(track)s" \
 	--embed-metadata \
