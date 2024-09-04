@@ -1,5 +1,9 @@
 #!/bin/bash
-
+id
+ls -l /Storage/Media/Unorganized/ytdlp/playlists
+ls -l /Storage/.cache
+ls -l /Storage
+ls -l /Storage/Media/Unorganized/ytdlp/mymusic-archive
 
 . /app/env
 echo Playlist: $Playlist 						#https://www.youtube.com/playlist?list=PLYJsyEKS11ydV1tC2wJtc3CkwczCyYNyZ
