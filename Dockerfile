@@ -21,8 +21,6 @@ RUN rm -f           \
     /etc/machine-id \
     /var/lib/dbus/machine-id
 
-
-
 RUN mkdir -p /app
 #RUN chown 1000:1000 -R /opt
 WORKDIR /app
@@ -49,10 +47,6 @@ ENV Playlist_TempPath="/Storage/.cache"
 ENV Playlist_Archive="/Storage/Media/Unorganized/ytdlp/mymusic-archive"
 ENV PUID="1000"
 ENV PGID="1000"
-#USER 1000:1000
-
-#CMD ["/opt/cron_start.sh"]
-
 
 ENV CronCommand /app/epg-start.sh
 SHELL ["/bin/bash", "-c"]
@@ -60,14 +54,12 @@ CMD usermod -u $PUID user ; \
     groupmod -g $PGID userg ; \
     usermod -a -G sudo user ; \
     chown -R user:userg $HOME ; \
-    chown -R user:userg $WINEPREFIX ; \
     chown -R user:userg /app ; \
     env >/app/env ; \
     ls -l /app ; \
-    sudo -E --group=userg --user=user $CronCommand >/home/user/cron.log 2>/home/user/cron.log & ; \
-    echo "$CronSchedule sudo -E --group=userg --user=user $CronCommand >/home/user/cron.log 2>/home/user/cron.log" >/home/user/cronfile ; \
+    sudo -E --group=userg --user=user $CronCommand >/app/cron.log 2>/app/cron.log & \
+    echo "$CronSchedule sudo -E --group=userg --user=user $CronCommand >/app/cron.log 2>/app/cron.log" >/home/user/cronfile ; \
     crontab /home/user/cronfile ; \
-    cron & ; \
-    tail -F /home/user/cron.log
-
+    cron & \
+    tail -F /app/cron.log
 
