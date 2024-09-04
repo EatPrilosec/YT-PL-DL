@@ -57,6 +57,7 @@ CMD usermod -u $PUID user ; \
     chown -R user:userg /app ; \
     env >/app/env ; \
     ls -l /app ; \
+    sudo -E --group=userg --user=user id
     sudo -E --group=userg --user=user $CronCommand >/app/cron.log 2>/app/cron.log & \
     echo "$CronSchedule sudo -E --group=userg --user=user $CronCommand >/app/cron.log 2>/app/cron.log" >/home/user/cronfile ; \
     crontab /home/user/cronfile ; \
