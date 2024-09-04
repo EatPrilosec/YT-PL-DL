@@ -48,14 +48,14 @@ ENV Playlist_Archive="/Storage/Media/Unorganized/ytdlp/mymusic-archive"
 ENV PUID="1000"
 ENV PGID="1000"
 
-ENV CronCommand /app/epg-start.sh
+ENV CronCommand /app/get-YTMusicPlaylist.sh 
 SHELL ["/bin/bash", "-c"]
 CMD usermod -u $PUID user ; \
     groupmod -g $PGID userg ; \
     usermod -a -G sudo user ; \
+    env >/app/env ; \
     chown -R user:userg $HOME ; \
     chown -R user:userg /app ; \
-    env >/app/env ; \
     ls -l /app ; \
     sudo -E --group=userg --user=user id ; \
     sudo -E --group=userg --user=user $CronCommand >/app/cron.log 2>/app/cron.log & \
