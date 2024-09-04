@@ -57,7 +57,7 @@ CMD if [ -f /app/fresh ] ; then \
         env >/app/env ; \
         chown -R user:userg $HOME ; \
         chown -R user:userg /app ; \
-        rm -rf /app/fresh
+        rm -rf /app/fresh ; \
         ls -l /app ; \
     fi ; \
     sudo -E --group=userg --user=user id ; \
