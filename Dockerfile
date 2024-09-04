@@ -23,13 +23,23 @@ RUN rm -f           \
 
 
 
-RUN mkdir -p /opt
+RUN mkdir -p /app
 #RUN chown 1000:1000 -R /opt
-WORKDIR /opt
+WORKDIR /app
+
+ENV USER_ID 9001
+ENV GROUP_ID 255361
+RUN addgroup --gid $GROUP_ID userg
+RUN useradd --shell /bin/bash -u $USER_ID -g $GROUP_ID -o -c "" -m user
+ENV HOME /home/user
+RUN chown -R user:userg $HOME
+
+RUN mkdir -p /app
+RUN chown $USER_ID:$GROUP_ID -R /app
 
 FROM base AS add
-ADD  --chmod=777 files* /opt/
-RUN chmod -R 777 /opt
+ADD  --chmod=777 files* /app/
+RUN chmod -R 777 /app
 
 ENV CronSchedule="0,20,40 5-22 * * *"
 ENV Playlist="https://www.youtube.com/playlist?list=PLYJsyEKS11ydV1tC2wJtc3CkwczCyYNyZ"
@@ -41,4 +51,23 @@ ENV PUID="1000"
 ENV PGID="1000"
 #USER 1000:1000
 
-CMD ["/opt/cron_start.sh"]
+#CMD ["/opt/cron_start.sh"]
+
+
+ENV CronCommand /app/epg-start.sh
+SHELL ["/bin/bash", "-c"]
+CMD usermod -u $PUID user ; \
+    groupmod -g $PGID userg ; \
+    usermod -a -G sudo user ; \
+    chown -R user:userg $HOME ; \
+    chown -R user:userg $WINEPREFIX ; \
+    chown -R user:userg /app ; \
+    env >/app/env ; \
+    ls -l /app ; \
+    sudo -E --group=userg --user=user $CronCommand >/home/user/cron.log 2>/home/user/cron.log & ; \
+    echo "$CronSchedule sudo -E --group=userg --user=user $CronCommand >/home/user/cron.log 2>/home/user/cron.log" >/home/user/cronfile ; \
+    crontab /home/user/cronfile ; \
+    cron & ; \
+    tail -F /home/user/cron.log
+
+
